@@ -219,7 +219,12 @@ const processWorkflowData = (workflowData, nodeSchemas, id) => {
   };
 };
 
-const NodeFlow = ({ initialNodeSchemas, initialWorkflowData }) => {
+const NodeFlow = ({
+  initialNodeSchemas,
+  initialWorkflowData,
+  onGenerationComplete,
+  onGenerationError,
+}) => {
   const params = useParams();
   const { id } = params;
 
@@ -1448,8 +1453,11 @@ const NodeFlow = ({ initialNodeSchemas, initialWorkflowData }) => {
             clearInterval(interval);
             setLoadingNodes({});
             setIsRunning(0);
+            onGenerationComplete?.({ type: "workflow" });
           } else if (anyFailed) {
-            toast.error("Workflow failed on some nodes");
+            const message = "Workflow failed on some nodes";
+            if (onGenerationError) onGenerationError(message);
+            else toast.error(message);
             clearInterval(interval);
             setLoadingNodes({});
             setIsRunning(0);
@@ -1461,7 +1469,9 @@ const NodeFlow = ({ initialNodeSchemas, initialWorkflowData }) => {
           clearInterval(interval);
           setLoadingNodes({});
           setIsRunning(0);
-          toast.error("Failed to get workflow status");
+          const message = "Failed to get workflow status";
+          if (onGenerationError) onGenerationError(message);
+          else toast.error(message);
         });
     }, 3000);
   };
