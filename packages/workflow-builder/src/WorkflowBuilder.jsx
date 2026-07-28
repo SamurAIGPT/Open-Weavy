@@ -7,6 +7,8 @@ import NodeFlow from "./components/NodeFlow";
 export default function Home({
   initialNodeSchemas,
   initialWorkflowData,
+  onGenerationStart,
+  onGenerationEnd,
   onGenerationComplete,
   onGenerationError,
 }) {
@@ -16,6 +18,8 @@ export default function Home({
         <NodeFlow 
           initialNodeSchemas={initialNodeSchemas} 
           initialWorkflowData={initialWorkflowData} 
+          onGenerationStart={onGenerationStart}
+          onGenerationEnd={onGenerationEnd}
           onGenerationComplete={onGenerationComplete}
           onGenerationError={onGenerationError}
         />
