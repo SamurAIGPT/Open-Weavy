@@ -219,7 +219,15 @@ const processWorkflowData = (workflowData, nodeSchemas, id) => {
   };
 };
 
-const NodeFlow = ({ apiKey, initialNodeSchemas, initialWorkflowData }) => {
+const NodeFlow = ({
+  apiKey,
+  initialNodeSchemas,
+  initialWorkflowData,
+  onGenerationStart,
+  onGenerationEnd,
+  onGenerationComplete,
+  onGenerationError,
+}) => {
   const params = useParams();
   const { id } = params;
 
@@ -1467,11 +1475,16 @@ const NodeFlow = ({ apiKey, initialNodeSchemas, initialWorkflowData }) => {
             clearInterval(interval);
             setLoadingNodes({});
             setIsRunning(0);
+            onGenerationEnd?.();
+            onGenerationComplete?.({ type: "workflow" });
           } else if (anyFailed) {
-            toast.error("Workflow failed on some nodes");
+            const message = "Workflow failed on some nodes";
+            if (onGenerationError) onGenerationError(message);
+            else toast.error(message);
             clearInterval(interval);
             setLoadingNodes({});
             setIsRunning(0);
+            onGenerationEnd?.();
           }
           console.log("run", runData);
         })
@@ -1480,13 +1493,17 @@ const NodeFlow = ({ apiKey, initialNodeSchemas, initialWorkflowData }) => {
           clearInterval(interval);
           setLoadingNodes({});
           setIsRunning(0);
-          toast.error("Failed to get workflow status");
+          onGenerationEnd?.();
+          const message = "Failed to get workflow status";
+          if (onGenerationError) onGenerationError(message);
+          else toast.error(message);
         });
     }, 3000);
   };
 
   const handleRunWorkflow = async () => {
     if (!interactionMode) return;
+    onGenerationStart?.();
     try {
       setIsRunning(1);
       setLoadingNodes({});
@@ -1509,6 +1526,7 @@ const NodeFlow = ({ apiKey, initialNodeSchemas, initialWorkflowData }) => {
       }
       setLoadingNodes({});
       setIsRunning(0);
+      onGenerationEnd?.();
     }
   };
 
