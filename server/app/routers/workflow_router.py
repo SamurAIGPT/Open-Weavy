@@ -21,7 +21,8 @@ from app.utils.workflow_helper import (
     update_workflow_category_helper,
     get_workflow_api_inputs_helper,
     execute_workflow_via_api_helper,
-    get_workflow_api_outputs_helper
+    get_workflow_api_outputs_helper,
+    calculate_dynamic_cost_helper
 )
 
 router = APIRouter()
@@ -132,6 +133,15 @@ async def cloudfront_signed_url(request: Request):
     try:
         payload = await request.json()
         return await cloudfront_signed_url_helper(payload)
+    except Exception as e:
+        if isinstance(e, HTTPException): raise e
+        raise HTTPException(status_code=400, detail=str(e))
+
+@router.post("/calculate_dynamic_cost")
+async def calculate_dynamic_cost(request: Request):
+    try:
+        payload = await request.json()
+        return await calculate_dynamic_cost_helper(payload)
     except Exception as e:
         if isinstance(e, HTTPException): raise e
         raise HTTPException(status_code=400, detail=str(e))

@@ -120,6 +120,10 @@ async def get_file_upload_url_helper(params: dict):
     url = f"https://api.muapi.ai/app/get_file_upload_url?{query_string}"
     return await proxy_request_helper("GET", url)
 
+async def calculate_dynamic_cost_helper(payload: dict):
+    url = "https://api.muapi.ai/app/calculate_dynamic_cost"
+    return await proxy_request_helper("POST", url, payload)
+
 async def get_workflow_last_run(workflow_id: str):
     url = f"https://api.muapi.ai/workflow/get-workflow-last-run/{workflow_id}"
     return await proxy_request_helper("GET", url)

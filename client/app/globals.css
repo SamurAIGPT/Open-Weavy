@@ -1,1 +1,30 @@
 @import "tailwindcss";
+
+/* Global Dark Scrollbars & Hide White Scrollbar Tracks */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2) !important;
+  border-radius: 9999px !important;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.35) !important;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent !important;
+}
+
